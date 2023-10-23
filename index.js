@@ -47,7 +47,6 @@ async function run() {
 
     app.post('/car', async(req, res)=>{
         const newCar = req.body;
-        console.log(newCar);
         const result = await carCollection.insertOne(newCar) ;
         res.send(result)
     })
@@ -59,7 +58,6 @@ async function run() {
 
     app.post('/carBrand', async(req, res)=>{
         const newBrand = req.body;
-        console.log(newBrand);
         const result = await brandCollection.insertOne(newBrand) ;
         res.send(result)
     })
@@ -72,7 +70,6 @@ async function run() {
 
     app.post('/myCart', async(req, res)=>{
         const newCart = req.body;
-        console.log(newCart);
         const result = await myCartCollection.insertOne(newCart) ;
         res.send(result)
     })
