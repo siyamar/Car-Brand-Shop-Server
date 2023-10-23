@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -30,10 +30,18 @@ async function run() {
 
     const carCollection = client.db('carDb').collection('car');
     const brandCollection = client.db('carDb').collection('carBrand');
+    const myCartCollection = client.db('carDb').collection('myCart');
+
 
     app.get('/car', async(req, res)=>{
         const cursor = carCollection.find();
         const result = await cursor.toArray();
+        res.send(result);
+      })
+    app.get('/car/:id', async(req, res)=>{
+        const id= req.params.id;
+        const query = {_id: new ObjectId(id)};
+        const result = await carCollection.findOne(query);
         res.send(result);
       })
 
@@ -54,6 +62,26 @@ async function run() {
         console.log(newBrand);
         const result = await brandCollection.insertOne(newBrand) ;
         res.send(result)
+    })
+
+    app.get('/myCart', async(req, res)=>{
+        const cursor = myCartCollection.find();
+        const result = await cursor.toArray();
+        res.send(result);
+      })
+
+    app.post('/myCart', async(req, res)=>{
+        const newCart = req.body;
+        console.log(newCart);
+        const result = await myCartCollection.insertOne(newCart) ;
+        res.send(result)
+    })
+
+    app.delete('/myCart/:id', async(req, res)=>{
+      const id = req.params.id;
+      const query = {_id: id};
+      const result = await myCartCollection.deleteOne(query);
+      res.send(result)
     })
 
     // Send a ping to confirm a successful connection
